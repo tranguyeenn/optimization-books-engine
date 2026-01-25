@@ -1,0 +1,15 @@
+# Core HTTP + parsing
+requests>=2.32.0
+beautifulsoup4>=4.12.0
+lxml>=5.2.0
+
+# Data handling
+pandas>=2.2.0
+numpy>=2.0.0
+
+# ML (linear regression, train/test split, metrics)
+scikit-learn>=1.5.0
+
+# Quality-of-life
+python-dotenv>=1.0.0
+tqdm>=4.66.0
