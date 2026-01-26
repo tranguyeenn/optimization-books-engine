@@ -173,4 +173,9 @@ Most recommender demos skip the hard parts:
 - failure modes
 
 This project treats recommendation as a systems problem, not just a modeling one.
+---
+## Author
+
+Built by Trang as a hands-on exploration of recommender systems, data pipelines, and ML-ready architecture.
+
 
