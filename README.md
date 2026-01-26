@@ -1,4 +1,4 @@
-# 📚 TBR ML Scraper & Recommender
+# TBR ML Scraper & Recommender
 
 A command-line **book recommendation system** that generates personalized “what should I read next?” suggestions using a user’s reading history (Goodreads-style CSV exports) and a curated Open Library corpus.
 
@@ -6,7 +6,7 @@ This project focuses on **end-to-end system design**: data ingestion, normalizat
 
 ---
 
-## ✨ Features
+## Features
 
 - Import user reading history from Goodreads-style CSV files  
 - Extract **recently read** and **currently reading** books  
@@ -21,7 +21,7 @@ This project focuses on **end-to-end system design**: data ingestion, normalizat
 
 ---
 
-## 🧠 Design Philosophy
+## Design Philosophy
 
 This project intentionally avoids premature machine learning.
 
@@ -35,7 +35,7 @@ The system is designed so that heuristic scoring can later be swapped with an ML
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```bash
 tbr-ml-scraper/
@@ -69,7 +69,7 @@ tbr-ml-scraper/
 
 ---
 
-## 🔄 End-to-End Pipeline
+## End-to-End Pipeline
 
 ```txt
 User CSV (Goodreads)
@@ -90,7 +90,7 @@ Recommended Books (CLI)
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Create a virtual environment
 
@@ -153,7 +153,7 @@ If no personalized matches are found, the system falls back to popular classics 
 All logic is deterministic and explainable.
 
 --- 
-Future Improvements
+## Future Improvements
 
 - Add “why this book” explanations per recommendation
 - Swap heuristic scoring for trained ranking models
@@ -163,7 +163,7 @@ Future Improvements
 - Persistent user profiles
 
 ---
-📌 Why This Project Exists
+## Why This Project Exists
 
 Most recommender demos skip the hard parts:
 
@@ -173,3 +173,4 @@ Most recommender demos skip the hard parts:
 - failure modes
 
 This project treats recommendation as a systems problem, not just a modeling one.
+
