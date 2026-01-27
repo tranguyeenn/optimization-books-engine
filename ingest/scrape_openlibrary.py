@@ -35,7 +35,7 @@ def normalize_search_result(raw: dict) -> dict:
         "author_key": (raw.get("author_key") or [None])[0],
 
         # Work identity (THIS IS THE IMPORTANT PART)
-        "work_key": raw.get("key"),  # e.g. "/works/OL45804W"
+        "work_key": raw.get("key"),  
 
         # Publication signal
         "first_publish_year": raw.get("first_publish_year"),
@@ -56,18 +56,18 @@ def save_book(book: dict) -> None:
 
 
 def scrape_and_store(query: str, limit: int = 25) -> None:
-    print(f"🔎 Open Library search: '{query}'")
+    print(f"Open Library search: '{query}'")
 
     results = search_openlibrary(query, limit)
 
-    print(f"📚 Found {len(results)} works")
+    print(f"Found {len(results)} works")
 
     for i, raw in enumerate(results):
         book = normalize_search_result(raw)
         save_book(book)
 
         print(f"   [{i+1}/{len(results)}] {book['title']}")
-        sleep(0.15)  # be polite
+        sleep(0.15)  
 
     print("Open Library scraping complete.")
 
