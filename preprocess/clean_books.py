@@ -133,4 +133,4 @@ if __name__ == "__main__":
     books = process_books(limit=None)
     save_books(books)
 
-    print(f"\n✅ Saved {len(books)} books to {OUTPUT_FILE}")
+    print(f"\nSaved {len(books)} books to {OUTPUT_FILE}")
