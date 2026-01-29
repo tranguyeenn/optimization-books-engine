@@ -1,64 +1,21 @@
 import json
 from pathlib import Path
 from typing import Optional
-
-from ingest.openlibrary_work import (
-    fetch_work,
-    extract_description_and_genres
-)
+from ingest.openlibrary_work import fetch_work, extract_description_and_genres
 
 RAW_BOOKS_DIR = Path("data/raw/books")
 OUTPUT_FILE = Path("data/processed/books.json")
 OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 GENRE_KEYWORDS = {
-    "historical": [
-        "historical",
-        "history",
-        "medieval",
-        "crusades",
-        "plantagenets",
-    ],
-    "romance": [
-        "romance",
-        "love",
-        "love stories",
-        "courtship",
-    ],
-    "adventure": [
-        "adventure",
-        "knights",
-        "chivalry",
-        "quests",
-        "journeys",
-    ],
-    "fantasy": [
-        "fantasy",
-        "magic",
-        "myth",
-        "legend",
-    ],
-    "philosophical": [
-        "philosophy",
-        "psychological",
-        "existential",
-        "moral",
-    ],
-    "children": [
-        "juvenile fiction",
-        "children's fiction",
-        "children",
-        "readers",
-    ],
-    "classic": [
-        "classic",
-        "classics",
-        "english literature",
-        "british literature",
-        "great britain, fiction",
-    ],
+    "historical": ["historical", "history", "medieval", "crusades", "plantagenets"],
+    "romance": ["romance", "love", "love stories", "courtship"],
+    "adventure": ["adventure", "knights", "chivalry", "quests", "journeys"],
+    "fantasy": ["fantasy", "magic", "myth", "legend"],
+    "philosophical": ["philosophy", "psychological", "existential", "moral"],
+    "children": ["juvenile fiction", "children's fiction", "children", "readers"],
+    "classic": ["classic", "classics", "english literature", "british literature", "great britain, fiction"],
 }
-
 
 def normalize_genres(subjects: list[str]) -> list[str]:
     if not subjects:
@@ -99,13 +56,8 @@ def clean_book(open_book: dict) -> dict:
         "edition_count": open_book.get("edition_count"),
         "description": description,
         "genres": genres,
-        "raw_subjects": raw_subjects,
-
-        "sources": {
-            "openlibrary": True
-        }
+        "sources": {"openlibrary": True}
     }
-
 
 def process_books(limit: Optional[int] = None) -> list[dict]:
     raw_books = load_openlibrary_books()
@@ -117,8 +69,8 @@ def process_books(limit: Optional[int] = None) -> list[dict]:
         if limit and i >= limit:
             break
 
-        print(f"\n📘 Processing {i+1}/{total}")
-        print(f"   {book['title']} — {book['author']}")
+        print(f"\nProcessing {i+1}/{total}")
+        print(f"        {book['title']} — {book['author']}")
 
         clean = clean_book(book)
         cleaned.append(clean)

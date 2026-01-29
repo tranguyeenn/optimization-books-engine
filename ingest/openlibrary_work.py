@@ -2,12 +2,7 @@ import requests
 
 BASE_URL = "https://openlibrary.org"
 
-
 def fetch_work(work_key: str) -> dict | None:
-    """
-    Fetch Open Library work-level data.
-    work_key example: '/works/OL74504W'
-    """
     if not work_key:
         return None
 
@@ -21,9 +16,6 @@ def fetch_work(work_key: str) -> dict | None:
 
 
 def extract_description_and_genres(work_data: dict) -> tuple[str | None, list[str]]:
-    """
-    Normalize description + subjects from Open Library work JSON.
-    """
     if not work_data:
         return None, []
 
