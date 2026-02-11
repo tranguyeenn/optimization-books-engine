@@ -26,6 +26,3 @@ def clean_books(df):
     df["Last Date Read"] = df["Last Date Read"].fillna(today)
 
     return df
-
-df = clean_books(df)
-print(df["Last Date Read"])
