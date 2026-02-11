@@ -7,7 +7,7 @@ PATH = Path('data/raw/storyGraph_export.csv')
 df = load_csv(PATH)
 
 def clean_books(df):
-    cols_to_keep = ['Title', 'Authors', 'ISBN/UID', 'Read Status', 'Star Rating']
+    cols_to_keep = ['Title', 'Authors', 'ISBN/UID', 'Read Status', 'Star Rating', 'Last Date Read']
     df = df[cols_to_keep]
 
     df = df[df["Read Status"].isin(["read", "currently-reading"])]
@@ -20,5 +20,12 @@ def clean_books(df):
     df.loc[missing_mask, "ISBN/UID"] = [
         str(random.randint(10**12, 10**13 - 1)) for _ in range(missing_mask.sum())
     ]
+
+    df["Last Date Read"] = pd.to_datetime(df["Last Date Read"], errors="coerce")
+    today = pd.Timestamp.today().normalize()
+    df["Last Date Read"] = df["Last Date Read"].fillna(today)
+
     return df
 
+df = clean_books(df)
+print(df["Last Date Read"])
