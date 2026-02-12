@@ -72,8 +72,7 @@ Users can:
 ## Installation
 Clone the repository:
 ``` bash
-git clone [https://github.com/tranguyeenn/optimization-books-engine](https://github.com/tranguyeenn/optimization-books-engine)
-cd tbr-engine
+git clone https://github.com/tranguyeenn/optimization-books-engine
 ```
 
 Create and activate a virtual environment:
