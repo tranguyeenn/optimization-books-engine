@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 from preprocess.normalize import normalize_rating, compute_recency
-from ranking.score import score_read_books, score_tbr_books, recommend_one
+from ranking.score import score_tbr_books, recommend_one
 
 
 app = FastAPI(title="LibroRank API")
