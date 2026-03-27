@@ -3,38 +3,41 @@ import random
 
 
 def clean_books(df):
+    """
+    Clean canonical LibroRank columns while gracefully handling missing fields.
+    """
+    df = df.copy()
 
-    cols_to_keep = ["Title", "Authors", "ISBN/UID", "Read Status", "Star Rating", "Last Date Read"]
+    for col, fallback in (
+        ("title", ""),
+        ("author", "unknown"),
+        ("genre", "unknown"),
+        ("read_status", "to-read"),
+        ("book_id", None),
+        ("rating", None),
+        ("last_date_read", None),
+    ):
+        if col not in df.columns:
+            df[col] = fallback
 
-    df = df[cols_to_keep].copy()
+    df["read_status"] = df["read_status"].astype(str).str.strip().str.lower()
+    df["rating"] = pd.to_numeric(df["rating"], errors="coerce")
 
-    df["Read Status"] = (
-        df["Read Status"]
-        .str.strip()
-        .str.lower()
-    )
+    mean_rating = df["rating"].dropna().mean()
+    if pd.notna(mean_rating):
+        df["rating"] = df["rating"].fillna(mean_rating)
+    else:
+        # If no ratings exist yet, keep a neutral default.
+        df["rating"] = df["rating"].fillna(3.0)
 
-    df["Star Rating"] = pd.to_numeric(
-        df["Star Rating"],
-        errors="coerce"
-    )
-
-    mean_rating = df["Star Rating"].mean()
-    df["Star Rating"] = df["Star Rating"].fillna(mean_rating)
-
-    missing_mask = df["ISBN/UID"].isna()
-
-    df.loc[missing_mask, "ISBN/UID"] = [
+    missing_mask = df["book_id"].isna() | (df["book_id"].astype(str).str.strip() == "")
+    df.loc[missing_mask, "book_id"] = [
         str(random.randint(10**12, 10**13 - 1))
         for _ in range(missing_mask.sum())
     ]
 
-    df["Last Date Read"] = pd.to_datetime(
-        df["Last Date Read"],
-        errors="coerce"
-    )
-
+    df["last_date_read"] = pd.to_datetime(df["last_date_read"], errors="coerce")
     today = pd.Timestamp.today().normalize()
-    df["Last Date Read"] = df["Last Date Read"].fillna(today)
+    df["last_date_read"] = df["last_date_read"].fillna(today)
 
     return df

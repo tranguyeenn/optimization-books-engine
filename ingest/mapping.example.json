@@ -1,0 +1,23 @@
+{
+  "column_mappings": {
+    "Book Name": "title",
+    "Writer": "author",
+    "Category": "genre",
+    "Status": "read_status",
+    "My Rating": "rating",
+    "Finished On": "last_date_read",
+    "External Id": "book_id"
+  },
+  "required_fields": ["title", "read_status"],
+  "defaults": {
+    "author": "unknown",
+    "genre": "unknown",
+    "rating": null,
+    "last_date_read": null,
+    "book_id": null
+  },
+  "type_hints": {
+    "rating": "numeric",
+    "last_date_read": "datetime"
+  }
+}

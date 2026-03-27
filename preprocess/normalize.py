@@ -1,40 +1,63 @@
 import pandas as pd
 
-def normalize_rating(df):
-    min_rating = df["Star Rating"].min()
-    max_rating = df["Star Rating"].max()
+def _resolve_column(df, candidates):
+    for col in candidates:
+        if col in df.columns:
+            return col
+    return None
 
-    if max_rating == min_rating:
-        df["rating_norm"] = 1.0
+
+def _min_max(series, reverse=False, neutral_value=1.0):
+    min_value = series.min()
+    max_value = series.max()
+    if pd.isna(min_value) or pd.isna(max_value) or max_value == min_value:
+        return pd.Series([neutral_value] * len(series), index=series.index)
+
+    normalized = (series - min_value) / (max_value - min_value)
+    if reverse:
+        normalized = 1 - normalized
+    return normalized
+
+
+def normalize_rating(df):
+    rating_col = _resolve_column(df, ["rating", "Star Rating"])
+    if rating_col is None:
+        df["rating_norm"] = 0.5
+        return df
+
+    ratings = pd.to_numeric(df[rating_col], errors="coerce").fillna(pd.to_numeric(df[rating_col], errors="coerce").mean())
+    if ratings.isna().all():
+        df["rating_norm"] = 0.5
     else:
-        df["rating_norm"] = (
-            (df["Star Rating"] - min_rating) /
-            (max_rating - min_rating)
-        )
+        ratings = ratings.fillna(3.0)
+        df["rating_norm"] = _min_max(ratings)
 
     return df
+
 
 def compute_recency(df):
     today = pd.Timestamp.today().normalize()
+    date_col = _resolve_column(df, ["last_date_read", "Last Date Read"])
+    if date_col is None:
+        df["days_since_read"] = 0
+        df["recency_norm"] = 0.5
+        return df
 
     df["days_since_read"] = (
-        today - df["Last Date Read"]
+        today - pd.to_datetime(df[date_col], errors="coerce").fillna(today)
     ).dt.days
 
-    min_days = df["days_since_read"].min()
-    max_days = df["days_since_read"].max()
-
-    if max_days == min_days:
-        df["recency_norm"] = 1.0
-    else:
-        df["recency_norm"] = 1 - (
-            (df["days_since_read"] - min_days) /
-            (max_days - min_days)
-        )
+    df["recency_norm"] = _min_max(df["days_since_read"], reverse=True)
 
     return df
 
+
 def compute_score(df, rating_weight=0.7, recency_weight=0.3):
+    if "rating_norm" not in df.columns:
+        df["rating_norm"] = 0.5
+    if "recency_norm" not in df.columns:
+        df["recency_norm"] = 0.5
+
     df["score"] = (
         rating_weight * df["rating_norm"] +
         recency_weight * df["recency_norm"]

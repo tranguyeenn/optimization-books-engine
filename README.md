@@ -5,6 +5,7 @@ This project ingests a StoryGraph export, performs data cleaning and feature eng
 
 ## Features
 - CSV ingestion and structured preprocessing
+- Flexible schema mapping for user-uploaded CSVs
 - Data cleaning and normalization
 - Recency-based scoring
 - Weighted ranking system
@@ -44,6 +45,7 @@ tbr-engine/
 ## How It Works
 ### 1. Ingestion
 Loads a StoryGraph CSV export from data/raw.
+Now also supports arbitrary CSV schemas through `ingest/mapping.example.json`.
 
 ### 2. Cleaning
 - Normalizes categorical fields
@@ -90,6 +92,24 @@ pip install pandas numpy
 Run the application:
 ``` bash
 python main.py
+```
+
+For flexible CSV pipeline usage in code:
+``` python
+from ingest.pipeline import run_flexible_pipeline
+
+result = run_flexible_pipeline(
+    "path/to/upload.csv",
+    mapping_config={
+        "column_mappings": {
+            "Book Name": "title",
+            "Writer": "author",
+            "My Rating": "rating",
+            "Status": "read_status",
+            "Finished On": "last_date_read"
+        }
+    }
+)
 ```
 
 You will be prompted with a menu:
